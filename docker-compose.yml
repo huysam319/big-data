@@ -47,6 +47,7 @@ services:
     volumes:
       - ./ivy2:/root/.ivy2
       - ./hadoop_config:/opt/hadoop/conf
+      - ./script:/opt/scripts
     networks:
       - bigdata
     depends_on:
