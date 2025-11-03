@@ -5,6 +5,16 @@
         <name>dfs.replication</name>
         <value>1</value>
     </property>
+    
+    <property>
+        <name>dfs.replication.max</name>
+        <value>1</value>
+    </property>
+    
+    <property>
+        <name>dfs.namenode.replication.min</name>
+        <value>1</value>
+    </property>
 
     <property>
         <name>dfs.namenode.http-address</name>

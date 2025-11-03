@@ -1,0 +1,40 @@
+{
+  "title": "Individual Patient Summary",
+  "panels": [
+    {
+      "title": "Patient Information",
+      "type": "text",
+      "gridPos": { "h": 4, "w": 24, "x": 0, "y": 0 },
+      "options": {
+        "mode": "html",
+        "content": "<div style=\"padding: 20px; background: #2c3e50; color: white; border-radius: 5px;\">\n  <h2>Patient ID: $patient_id</h2>\n  <p>Real-time monitoring dashboard</p>\n</div>"
+      }
+    },
+    {
+      "title": "Vital Signs Trends - Last 24 Hours",
+      "type": "timeseries",
+      "datasource": "Postgres-MIMIC",
+      "targets": [
+        {
+          "rawSql": "SELECT\n  event_time as time,\n  valuenum as value,\n  CASE vital_name\n    WHEN 'heart_rate' THEN 'Heart Rate (bpm)'\n    WHEN 'bp_systolic' THEN 'Systolic BP (mmHg)'\n    WHEN 'respiratory_rate' THEN 'Respiratory Rate (bpm)'\n    WHEN 'spo2' THEN 'SpO2 (%)'\n    ELSE vital_name\n  END as metric\nFROM chartevents_stream\nWHERE subject_id = '$patient_id'\n  AND vital_name IN ('heart_rate', 'bp_systolic', 'respiratory_rate', 'spo2')\n  AND event_time >= NOW() - INTERVAL '24 hours'\nORDER BY time",
+          "format": "time_series",
+          "refId": "A"
+        }
+      ],
+      "gridPos": { "h": 10, "w": 24, "x": 0, "y": 4 }
+    }
+  ],
+  "templating": {
+    "list": [
+      {
+        "name": "patient_id",
+        "type": "query",
+        "datasource": "Postgres-MIMIC",
+        "query": "SELECT DISTINCT subject_id FROM chartevents_stream ORDER BY subject_id",
+        "refresh": 1,
+        "includeAll": false,
+        "multi": false
+      }
+    ]
+  }
+}

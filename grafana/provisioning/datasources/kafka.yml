@@ -1,0 +1,21 @@
+apiVersion: 1
+
+datasources:
+  - name: Kafka
+    type: hamedkarbasi93-kafka-datasource
+    access: proxy
+    url: http://kafka:29092
+    jsonData:
+      # Cấu hình Kafka connection
+      bootstrapServers: kafka:29092
+      autoOffsetReset: latest
+      consumerGroup: grafana-consumer
+      topic: mimic_chartevents_stream
+      # Optional: Authentication nếu có
+      # securityProtocol: "SASL_PLAINTEXT"
+      # saslMechanism: "PLAIN"
+      # saslUsername: "username"
+      # saslPassword: "password"
+    version: 1
+    editable: true
+    uid: kafka-ds-uid

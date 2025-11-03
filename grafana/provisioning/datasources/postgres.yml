@@ -1,0 +1,19 @@
+apiVersion: 1
+
+datasources:
+  - name: Postgres-MIMIC
+    type: postgres
+    access: proxy
+    url: postgres_db:5432
+    database: database
+    user: username
+    secureJsonData:
+      password: "password"
+    jsonData:
+      sslmode: "disable"
+      maxOpenConns: 100
+      maxIdleConns: 100
+      connMaxLifetime: 14400
+      postgresVersion: 1500
+      timescaledb: false
+    editable: true
