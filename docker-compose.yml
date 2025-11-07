@@ -28,7 +28,9 @@ services:
     environment:
       - SERVICE_PRECONDITION=namenode:9870
     ports:
-      - "9864:9864"
+      - "9864:9864"   # DataNode HTTP UI
+      - "9866:9866"   # Data transfer port (required for HDFS clients outside Docker)
+      - "9867:9867"   # IPC service (optional but recommended)
     volumes:
       - hadoop_datanode:/hadoop/dfs/data
       - ./hadoop_config:/opt/hadoop/conf

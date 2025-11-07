@@ -24,4 +24,19 @@
         <name>dfs.datanode.http-address</name>
         <value>0.0.0.0:9864</value>
     </property>
+    <!-- Bind DataNode services to all interfaces so they are reachable -->
+    <property>
+        <name>dfs.datanode.address</name>
+        <value>0.0.0.0:9866</value>
+    </property>
+    <property>
+        <name>dfs.datanode.ipc.address</name>
+        <value>0.0.0.0:9867</value>
+    </property>
+    <!-- For host (Windows) clients: advertise a hostname reachable from outside Docker -->
+    <!-- Docker Desktop resolves host.docker.internal inside containers; publishing 9866 is required. -->
+    <property>
+        <name>dfs.datanode.hostname</name>
+        <value>host.docker.internal</value>
+    </property>
 </configuration>

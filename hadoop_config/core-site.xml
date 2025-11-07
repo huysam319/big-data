@@ -5,4 +5,9 @@
     <name>fs.defaultFS</name>
     <value>hdfs://namenode:8020</value>
   </property>
+  <!-- Ensure clients use DataNode hostnames (not container IPs) -->
+  <property>
+    <name>dfs.client.use.datanode.hostname</name>
+    <value>true</value>
+  </property>
 </configuration>
