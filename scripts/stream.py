@@ -85,28 +85,18 @@ mapping_rows = [
     # Blood Pressure
     ("220050", "bp_systolic"),
     ("220051", "bp_diastolic"), 
-    # ("220052", "bp_mean"),
     
     # Heart Rate
     ("220045", "heart_rate"),
-    # ("211", "heart_rate"),
-    # ("220046", "heart_rate_alarm"),
     
     # Respiratory Rate
     ("220210", "respiratory_rate"),
-    # ("224422", "respiratory_rate_spontaneous"),
-    # ("224688", "respiratory_rate_total"),
     
     # Oxygen Saturation
     ("220277", "spo2"),
-    # ("646", "spo2"),
-    # ("220227", "spo2_alarm"),
     
     # Temperature
     ("223762", "temperature_celsius"),
-    # ("223761", "temperature_fahrenheit"),
-    # ("224027", "skin_temperature"),
-    
 ]
 schema = StructType([
     StructField("itemid", StringType(), False),
@@ -128,7 +118,7 @@ w = Window.partitionBy(lit(1)).orderBy(col("event_time").asc(), col("itemid_str"
 ordered_df = fact_df.withColumn("seq", row_number().over(w) - 1)  # bắt đầu từ 0
 
 # =========================
-# 5) Tạo nguồn stream "đồng hồ" và join để phát lần lượt
+# 5) Tạo nguồn stream và join để phát lần lượt
 # =========================
 # rate source sinh các giá trị (timestamp, value) tăng dần theo ROWS_PER_SECOND.
 total_records = ordered_df.count()

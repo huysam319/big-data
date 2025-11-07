@@ -13,11 +13,13 @@ CONVERTER_SCRIPT="$SCRIPT_DIR/convert_csv_to_parquet_chunked.py"
 
 # Files to convert
 FILES_TO_CONVERT=(
-    "d_items.csv.gz"
-    "prescriptions.csv.gz"
-    "icustays.csv.gz"
+    # "d_items.csv.gz"
+    # "prescriptions.csv.gz"
+    # "icustays.csv.gz"
     "chartevents.csv.gz"
 )
+
+MAX_ROWS=10000000
 
 # Colors for output
 RED='\033[0;31m'
@@ -38,6 +40,14 @@ log_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
 
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        --max-rows) MAX_ROWS="$2"; shift ;;
+        *) log_error "Unknown parameter passed: $1"; exit 1 ;;
+    esac
+    shift
+done
+
 # Check if converter script exists
 if [[ ! -f "$CONVERTER_SCRIPT" ]]; then
     log_error "Converter script not found: $CONVERTER_SCRIPT"
@@ -49,6 +59,7 @@ mkdir -p "$OUTPUT_DIR"
 
 log_info "Starting CSV.gz to Parquet conversion..."
 log_info "Files to process: ${FILES_TO_CONVERT[*]}"
+log_info "Max rows per file: $MAX_ROWS"
 
 success_count=0
 total_count=${#FILES_TO_CONVERT[@]}
@@ -66,7 +77,7 @@ for csv_file in "${FILES_TO_CONVERT[@]}"; do
         continue
     fi
     
-    if python3 "$CONVERTER_SCRIPT" "$input_path" "$output_path"; then
+    if python3 "$CONVERTER_SCRIPT" "$input_path" "$output_path" --max-rows "$MAX_ROWS"; then
         log_success "Converted: $csv_file -> $parquet_file"
         ((success_count++))
     else

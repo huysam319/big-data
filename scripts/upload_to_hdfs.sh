@@ -13,9 +13,9 @@ HDFS_PATH="/data"
 
 # Files to upload (based on converted Parquet files)
 FILES_TO_UPLOAD=(
-    "prescriptions.parquet"
-    "icustays.parquet"
-    "d_items.parquet"
+    # "prescriptions.parquet"
+    # "icustays.parquet"
+    # "d_items.parquet"
     "chartevents.parquet"
 )
 

@@ -28,9 +28,9 @@ services:
     environment:
       - SERVICE_PRECONDITION=namenode:9870
     ports:
-      - "9864:9864"   # DataNode HTTP UI
-      - "9866:9866"   # Data transfer port (required for HDFS clients outside Docker)
-      - "9867:9867"   # IPC service (optional but recommended)
+      - "9864:9864" # DataNode HTTP UI
+      - "9866:9866" # Data transfer port (required for HDFS clients outside Docker)
+      - "9867:9867" # IPC service (optional but recommended)
     volumes:
       - hadoop_datanode:/hadoop/dfs/data
       - ./hadoop_config:/opt/hadoop/conf
@@ -117,37 +117,6 @@ services:
           memory: 4G
         reservations:
           memory: 2G
-
-  spark-thrift:
-    image: apache/spark:3.5.0
-    container_name: spark-thrift
-    environment:
-      - SPARK_MASTER_URL=spark://spark-master:7077
-      - SPARK_NO_DAEMONIZE=true
-      - HADOOP_CONF_DIR=/opt/hadoop/conf
-    command: >
-      bash -c "
-      /opt/spark/sbin/start-thriftserver.sh
-      --master spark://spark-master:7077
-      --conf spark.sql.hive.thriftServer.singleSession=true
-      --hiveconf hive.server2.thrift.port=10000
-      --hiveconf hive.server2.thrift.bind.host=0.0.0.0
-      --conf spark.sql.warehouse.dir=hdfs://namenode:8020/user/hive/warehouse"
-    ports:
-      - "10000:10000"
-    networks:
-      - bigdata
-    depends_on:
-      spark-master:
-        condition: service_healthy
-      namenode:
-        condition: service_healthy
-    deploy:
-      resources:
-        limits:
-          memory: 2G
-        reservations:
-          memory: 1G
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.3.2
