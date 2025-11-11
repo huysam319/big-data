@@ -1,0 +1,13 @@
+apiVersion: 1
+contactPoints:
+  - orgId: 1
+    name: email-abnormal
+    receivers:
+      - uid: email_abnormal_uid
+        type: email
+        disableResolveMessage: false
+        settings:
+          addresses: voquynhchantran120804@gmail.com
+          singleEmail: true
+          # subject: '{{ $$labels.alertname }} — {{ $$labels.severity }}'
+          # message: '{{ template "default.message" . }}'

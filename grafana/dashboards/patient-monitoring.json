@@ -1,4 +1,5 @@
 {
+  "title": "Individual Patient Monitoring",
   "annotations": {
     "list": [
       {
@@ -840,7 +841,6 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Individual Patient Summary",
   "uid": "af2y4p656ocn4a",
   "version": 14,
   "weekStart": ""

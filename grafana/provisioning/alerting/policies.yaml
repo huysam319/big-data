@@ -1,0 +1,11 @@
+apiVersion: 1
+policies:
+  - orgId: 1
+    receiver: grafana-default-email
+    routes:
+      - receiver: email-abnormal
+        object_matchers:
+          - ['alertname', '=', 'Abnormal Vitals Detected']
+          - ['severity', '=', 'high']
+        group_wait: 0s
+

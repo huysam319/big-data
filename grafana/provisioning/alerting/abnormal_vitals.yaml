@@ -1,0 +1,67 @@
+apiVersion: 1
+groups:
+  - orgId: 1
+    name: AbnormalVitals
+    folder: Alerts
+    interval: 10s
+    rules:
+      - uid: abnormal_vitals_detected
+        title: Abnormal Vitals Detected
+        condition: C
+        data:
+          # A: Query recent abnormal events from PostgreSQL (last 5 minutes)
+          - refId: A
+            datasourceUid: postgres-mimic 
+            relativeTimeRange:
+              from: 30
+              to: 0
+            model:
+              format: table
+              rawSql: |
+                SELECT
+                  now() AS time,
+                  COUNT(*)::int AS new_rows 
+                FROM abnormal_events
+                WHERE event_time >= now() - interval '20 seconds'
+          # B: Reduce to last value of abnormal_count
+          - refId: B
+            datasourceUid: __expr__ 
+            relativeTimeRange:
+              from: 30
+              to: 0
+            model:
+              type: reduce
+              expression: A
+              reducer: last
+              settings:
+                mode: replaceNN
+                replaceWithValue: 0
+          # C: Threshold abnormal_count > 0
+          - refId: C
+            datasourceUid: __expr__ 
+            relativeTimeRange:
+              from: 30
+              to: 0
+            model:
+              type: threshold
+              expression: B
+              conditions:
+                - evaluator:
+                    type: gt
+                    params:
+                      - 0
+                  operator:
+                    type: and
+                  reducer:
+                    type: last
+                  query:
+                    params:
+                      - B
+        noDataState: NoData
+        execErrState: Error
+        for: 0s
+        annotations:
+          summary: "Abnormal vitals detected in the last 20 seconds"
+        labels:
+          severity: high
+
