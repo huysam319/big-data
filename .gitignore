@@ -3,3 +3,4 @@ ivy2
 venv
 .env
 .vscode
+scripts/**/__pycache__
